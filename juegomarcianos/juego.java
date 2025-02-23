@@ -30,10 +30,18 @@ public class juego {
         Scanner scanner = new Scanner(System.in);
         Random random = new Random();
 
+        System.out.println("¡Bienvenido al juego de marcianos!");
+        System.out.println("Presiona 'I' para ver las instrucciones o cualquier otra tecla para comenzar.");
+        String input = scanner.nextLine().toUpperCase();
+
+        if (input.equals("I")) {
+            mostrarInstrucciones();
+        }
+
         while (true) {
             dibujarTablero();
             System.out.println("Mueve la nave (A: izquierda, D: derecha, Q: salir):");
-            String input = scanner.nextLine().toUpperCase();
+            input = scanner.nextLine().toUpperCase();
 
             if (input.equals("Q")) {
                 break;
@@ -74,6 +82,18 @@ public class juego {
             }
         }
         System.out.println();
+    }
+    /**
+     * Muestra las instrucciones del juego.
+     */
+    private void mostrarInstrucciones() {
+        System.out.println("Instrucciones:");
+        System.out.println("  - Usa 'A' para mover la nave a la izquierda.");
+        System.out.println("  - Usa 'D' para mover la nave a la derecha.");
+        System.out.println("  - Presiona 'Q' para salir del juego.");
+        System.out.println("  - Evita a los marcianos para ganar puntos.");
+        System.out.println("  - Si un marciano te golpea, pierdes salud.");
+        System.out.println("  - El juego termina cuando tu nave es destruida o decides salir.");
     }
 }
 
