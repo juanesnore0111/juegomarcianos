@@ -4,8 +4,8 @@ package juegomarcianos;
  * Representa una nave en el juego de marcianos.
  * Esta clase maneja la posición y la salud de la nave.
  *
- * @author Tu Nombre
- * @version 1.0
+ * @author Juan Esteban Noreña
+ * @version 1.1
  * @since 2025-02-23
  */
 public class nave {
@@ -77,5 +77,13 @@ public class nave {
     @Deprecated
     public void destruir() {
         this.salud = 0;
+    }
+    /**
+     * Repara la nave, aumentando su salud.
+     *
+     * @param cantidad La cantidad de salud a restaurar.
+     */
+    public void repararNave(int cantidad) {
+        this.salud = Math.min(100, this.salud + cantidad);
     }
 }

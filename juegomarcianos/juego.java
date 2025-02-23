@@ -6,8 +6,8 @@ import java.util.Random;
 /**
  * Clase principal que maneja la lógica del juego de marcianos.
  *
- * @author Tu Nombre
- * @version 1.2
+ * @author Juan Esteban Noreña
+ * @version 1.4
  * @since 2025-02-23
  */
 public class juego {
@@ -16,6 +16,8 @@ public class juego {
     private int nivel;
     private static final int ANCHO_TABLERO = 10;
     private static final int PUNTOS_POR_NIVEL = 100;
+    private boolean escudoActivo;
+    private int turnosEscudo;
 
     /**
      * Constructor para iniciar un nuevo juego.
@@ -24,6 +26,8 @@ public class juego {
         this.jugador = new nave(ANCHO_TABLERO / 2);
         this.puntuacion = 0;
         this.nivel = 1;
+        this.escudoActivo = false;
+        this.turnosEscudo = 0;
     }
 
     /**
@@ -54,12 +58,27 @@ public class juego {
                 jugador.moverDerecha(1, ANCHO_TABLERO - 1);
             }
 
+            // Lógica de power-ups
+            if (random.nextDouble() < 0.1) {
+                activarPowerUp();
+            }
+
+            if (escudoActivo) {
+                turnosEscudo--;
+                if (turnosEscudo <= 0) {
+                    escudoActivo = false;
+                    System.out.println("El escudo se ha desactivado.");
+                }
+            }
+
             if (random.nextDouble() < 0.3 * nivel) {
                 int posicionMarciano = random.nextInt(ANCHO_TABLERO);
                 if (posicionMarciano == jugador.getPosicion()) {
-                    if (!jugador.recibirDaño(20 * nivel)) {
+                    if (!escudoActivo && !jugador.recibirDaño(20 * nivel)) {
                         System.out.println("¡Tu nave ha sido destruida! Fin del juego.");
                         break;
+                    } else if (escudoActivo) {
+                        System.out.println("¡El escudo te ha protegido del ataque!");
                     }
                 } else {
                     puntuacion += 10;
@@ -76,6 +95,25 @@ public class juego {
     }
 
     /**
+     * Activa un power-up aleatorio.
+     */
+    private void activarPowerUp() {
+        Random random = new Random();
+        int powerUp = random.nextInt(2);
+        switch (powerUp) {
+            case 0:
+                escudoActivo = true;
+                turnosEscudo = 3;
+                System.out.println("¡Has obtenido un escudo! Duración: 3 turnos.");
+                break;
+            case 1:
+                jugador.repararNave(50);
+                System.out.println("¡Has obtenido una reparación! +50 de salud.");
+                break;
+        }
+    }
+
+    /**
      * Sube el nivel del juego, aumentando la dificultad.
      */
     private void subirNivel() {
@@ -88,10 +126,11 @@ public class juego {
      * Dibuja el estado actual del tablero de juego en la consola.
      */
     private void dibujarTablero() {
-        System.out.println("Nivel: " + nivel + " | Puntuación: " + puntuacion + " | Salud: " + jugador.getSalud());
+        System.out.println("Nivel: " + nivel + " | Puntuación: " + puntuacion + " | Salud: " + jugador.getSalud() +
+                (escudoActivo ? " | Escudo activo: " + turnosEscudo + " turnos" : ""));
         for (int i = 0; i < ANCHO_TABLERO; i++) {
             if (i == jugador.getPosicion()) {
-                System.out.print("N");
+                System.out.print(escudoActivo ? "S" : "N");
             } else {
                 System.out.print(".");
             }
@@ -110,6 +149,7 @@ public class juego {
         System.out.println("  - Evita a los marcianos para ganar puntos.");
         System.out.println("  - Si un marciano te golpea, pierdes salud.");
         System.out.println("  - Cada 100 puntos, subirás de nivel y aumentará la dificultad.");
+        System.out.println("  - Pueden aparecer power-ups que te den ventajas temporales.");
         System.out.println("  - El juego termina cuando tu nave es destruida o decides salir.");
     }
 }

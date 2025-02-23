@@ -2,7 +2,8 @@ package juegomarcianos;
 
 public class juegoMain {
     /**
-     * Método principal para ejecutar el juego.
+     * Metodo principal que ejecuta nuestro juego
+     * @author Juan Esteban Noreña
      *
      * @param args Argumentos de línea de comando (no se utilizan).
      */
